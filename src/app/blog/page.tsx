@@ -1,38 +1,17 @@
-"use client";
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { getAllBlogs } from '@/lib/markdown';
 
-export default function BlogPage() {
-  const [allBlogsData, setAllBlogsData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const blogs = await getAllBlogs();
-        setAllBlogsData(blogs);
-      } catch (error) {
-        console.error("Failed to fetch blog data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    
-    fetchData();
-  }, []);
-  
+export default async function BlogPage() {
+  const allBlogsData = await getAllBlogs();
+
   return (
     <div className="blog-container">
       <div className="blog-header">
         <h1>TransferFiles Blog</h1>
         <p>Learn more about file transfers, secure sharing, and cross-device solutions</p>
       </div>
-      
-      {loading ? (
-        <div className="loading-spinner">Loading blogs...</div>
-      ) : (
+
+      {allBlogsData.length > 0 ? (
         <div className="blog-list">
           {allBlogsData.map(({ slug, title, date, excerpt }) => (
             <div className="blog-card" key={slug}>
@@ -53,6 +32,8 @@ export default function BlogPage() {
             </div>
           ))}
         </div>
+      ) : (
+        <div className="loading-spinner">No blog posts found.</div>
       )}
     </div>
   );

@@ -1,5 +1,3 @@
-"use server";
-
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -9,8 +7,20 @@ import html from 'remark-html';
 // Path to blog posts directory
 const blogsDirectory = path.join(process.cwd(), 'src/data/blogs');
 
+export interface BlogMeta {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  author?: string;
+}
+
+export interface BlogData extends BlogMeta {
+  contentHtml: string;
+}
+
 // Get data for all blog posts
-export async function getAllBlogs() {
+export async function getAllBlogs(): Promise<BlogMeta[]> {
   // Get all file names in the blogs directory
   const fileNames = fs.readdirSync(blogsDirectory);
   
@@ -60,16 +70,12 @@ export async function getAllBlogSlugs() {
       // Parse front matter data with gray-matter
       const matterResult = matter(fileContents);
       
-      return {
-        params: {
-          slug: matterResult.data.slug || fileName.replace(/\.md$/, '')
-        }
-      };
+      return matterResult.data.slug || fileName.replace(/\.md$/, '');
     });
 }
 
 // Get blog content by slug
-export async function getBlogData(slug: string) {
+export async function getBlogData(slug: string): Promise<BlogData> {
   const fileNames = fs.readdirSync(blogsDirectory);
   let fullPath = '';
   

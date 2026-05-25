@@ -84,6 +84,42 @@ npm run build
 yarn build
 ```
 
+This project now supports **Cloudflare Pages** deployment through Next.js **static export**. Production builds generate a deployable static site in the `out/` directory.
+
+### Deploying to Cloudflare Pages
+
+Recommended Cloudflare Pages configuration:
+
+- **Framework preset**: `Next.js`
+- **Build command**: `npm run build:cloudflare`
+- **Build output directory**: `out`
+- **Node.js version**: `18+` (recommended `20`)
+
+Optional environment variables:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://your-project.pages.dev
+NEXT_PUBLIC_SITE_DOMAIN=your-project.pages.dev
+NEXT_PUBLIC_ANALYTICS_DOMAIN=your-project.pages.dev
+NEXT_PUBLIC_GA_ID=your-google-analytics-id
+```
+
+Notes:
+
+- `NEXT_PUBLIC_SITE_URL` is used for metadata and canonical URLs.
+- `NEXT_PUBLIC_SITE_DOMAIN` is used to filter self-links from the friend links section.
+- `NEXT_PUBLIC_ANALYTICS_DOMAIN` is optional and falls back to `NEXT_PUBLIC_SITE_DOMAIN`.
+- `NEXT_PUBLIC_GA_ID` is optional; if not set, Google Analytics is skipped.
+
+Local verification:
+
+```bash
+npm install
+npm run build:cloudflare
+```
+
+Then point Cloudflare Pages at the generated `out/` directory.
+
 ## Technology Stack
 
 - **Frontend Framework**: Next.js 14 (React)

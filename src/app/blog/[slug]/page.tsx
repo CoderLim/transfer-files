@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
 export async function generateStaticParams() {
-  const paths = await getAllBlogSlugs();
-  return paths;
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
